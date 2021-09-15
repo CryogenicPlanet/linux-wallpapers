@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
-    "encoding/json"
 	"io/ioutil"
-	"strconv"
 	"os"
+	"path/filepath"
+	"strconv"
+	"time"
+
 	"github.com/kbinani/screenshot"
 	"github.com/reujab/wallpaper"
 )
@@ -14,17 +16,20 @@ import (
 func handleWallpaperChange(num int)  {
 	fmt.Println("Number of active monitor(s) : ", num)
 
-	plan, _ := ioutil.ReadFile("data.json")
+
+  	ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    path := filepath.Dir(ex)
+    fmt.Println(path)
+
+	plan, _ := ioutil.ReadFile(path + "/data.json")
 	var data map[string]interface{}
-	err := json.Unmarshal(plan, &data)
+	err = json.Unmarshal(plan, &data)
 
 	if(err != nil) {
 		fmt.Println("Error reading file")
-	}
-
-	path, err := os.Getwd()
-	if err != nil {
-	    fmt.Println(err)
 	}
 
 	fmt.Println("JSON data", data)
